@@ -17,60 +17,9 @@ import androidx.compose.ui.unit.dp
     Copyright (c) 2022 ElConfidencial. All rights reserved.
 */
 
-object PokemonList {
-    val value = listOf(
-        "Charmander",
-        "Charmeleon",
-        "Charizard",
-        "Bulbasur",
-        "Ivisaur",
-        "Venusaur",
-        "Squirtel",
-        "Wartortel",
-        "Blastoise",
-        "Charmander",
-        "Charmeleon",
-        "Charizard",
-        "Bulbasur",
-        "Ivisaur",
-        "Venusaur",
-        "Squirtel",
-        "Wartortel",
-        "Blastoise",
-        "Charmander",
-        "Charmeleon",
-        "Charizard",
-        "Bulbasur",
-        "Ivisaur",
-        "Venusaur",
-        "Squirtel",
-        "Wartortel",
-        "Blastoise",
-        "Charmander",
-        "Charmeleon",
-        "Charizard",
-        "Bulbasur",
-        "Ivisaur",
-        "Venusaur",
-        "Squirtel",
-        "Wartortel",
-        "Blastoise",
-        "Charmander",
-        "Charmeleon",
-        "Charizard",
-        "Bulbasur",
-        "Ivisaur",
-        "Venusaur",
-        "Squirtel",
-        "Wartortel",
-        "Blastoise"
-    )
-}
-
 @Composable
 fun PokemonListScreen(
-    modifier: Modifier = Modifier,
-    pokemonList: List<String> = PokemonList.value
+    viewModel: PokemonListViewModel
 ) {
     LazyVerticalGrid(
         contentPadding = PaddingValues(16.dp),
@@ -78,8 +27,8 @@ fun PokemonListScreen(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         columns = GridCells.Fixed(2),
     ) {
-        items(pokemonList.size) { index ->
-            PokemonItem(pokemonName = pokemonList[index])
+        items(viewModel.pokemonList.size) { index ->
+            PokemonItem(pokemonName = viewModel.pokemonList[index])
         }
     }
 }
