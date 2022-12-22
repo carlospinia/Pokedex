@@ -1,16 +1,31 @@
 package com.pineapplec.pokemon
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import kotlinx.coroutines.flow.collectLatest
 
 /* 
     Created by Carlos Piña on 21/12/22.
@@ -19,27 +34,64 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun PokemonListScreen(
-    viewModel: PokemonListViewModel
+    viewModel: PokemonListViewModel = hiltViewModel()
 ) {
-    LazyVerticalGrid(
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        columns = GridCells.Fixed(2),
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    val pokemonUiState by produceState<PokemonListUiState>(
+        initialValue = PokemonListUiState.Loading,
+        key1 = lifecycle,
+        key2 = viewModel
     ) {
-        items(viewModel.pokemonList.size) { index ->
-            PokemonItem(pokemonName = viewModel.pokemonList[index])
+        lifecycle.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
+            viewModel.uiState.collectLatest { value = it }
+        }
+    }
+
+    (pokemonUiState as? PokemonListUiState.Result)?.let { result ->
+        LazyVerticalGrid(
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            columns = GridCells.Fixed(2),
+        ) {
+            items(result.pokemonList.size) { index ->
+                PokemonItem(pokemonId = index + 1, pokemonName = result.pokemonList[index])
+            }
         }
     }
 }
 
 @Composable
-fun PokemonItem(modifier: Modifier = Modifier, pokemonName: String) {
+fun PokemonItem(modifier: Modifier = Modifier, pokemonId: Int, pokemonName: String) {
     Card(elevation = 4.dp) {
-        Text(
-            modifier = modifier.padding(horizontal = 8.dp, vertical = 24.dp),
-            text = pokemonName,
-            textAlign = TextAlign.Center
-        )
+        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(8.dp)) {
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(getPokemonUrl(pokemonId))
+                    .crossfade(true)
+                    .placeholder(com.pineapplec.core.ui.R.drawable.pokeball_placeholder)
+                    .build(),
+                contentDescription = "$pokemonName image",
+                modifier = Modifier
+                    .width(80.dp)
+                    .height(80.dp)
+            )
+            Text(
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .fillMaxWidth(),
+                text = pokemonName,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }
+
+private fun getPokemonUrl(pokemonId: Int) =
+    "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$pokemonId.png"
+
+/*@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    PokemonItem(pokemonId = 1, pokemonName = "Pikachu")
+}*/

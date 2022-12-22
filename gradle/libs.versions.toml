@@ -2,6 +2,10 @@
 composeUiVersion = "1.3.2"
 androidxComposeCompiler = "1.3.2"
 daggerHilt = "2.44.2"
+dagger2 = "2.44.2"
+hiltNavigationCompose = "1.0.0"
+retrofitVersion = "2.9.0"
+moshiVersion = "1.14.0"
 
 [libraries]
 androidx-core-ktx = "androidx.core:core-ktx:1.9.0"
@@ -10,8 +14,18 @@ androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling
 androidx-compose-material = "androidx.compose.material:material:1.3.1"
 androidx-activity-compose = "androidx.activity:activity-compose:1.6.1"
 androidx-lifecycle-runtime-ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 com-google-dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "daggerHilt" }
 com-google-dagger-hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "daggerHilt" }
+com-google-dagger2 = { module = "com.google.dagger:dagger", version.ref = "dagger2" }
+com-google-dagger2-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger2" }
+io-coil-kt-coil-compose = "io.coil-kt:coil-compose:2.2.2"
+com-squareup-okhttp3-logging-interceptor = "com.squareup.okhttp3:logging-interceptor:4.10.0"
+com-squareup-retrofit2-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofitVersion" }
+com-squareup-retrofit2-converter-gson = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofitVersion" }
+com-squareup-moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshiVersion" }
+com-squareup-moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshiVersion" }
+com-squareup-retrofit2-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofitVersion" }
 
 #Test
 junit-junit = "junit:junit:4.13.2"

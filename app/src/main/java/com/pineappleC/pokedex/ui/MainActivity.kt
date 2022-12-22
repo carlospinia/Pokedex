@@ -7,9 +7,7 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.pineapplec.core.ui.theme.PokedexTheme
 import com.pineapplec.pokemon.PokemonListScreen
 import com.pineapplec.pokemon.PokemonListViewModel
@@ -33,13 +31,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    PokedexTheme {
-        PokemonListScreen(viewModel = PokemonListViewModel())
     }
 }
