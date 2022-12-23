@@ -25,6 +25,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.pineapplec.pokemon.model.PokemonItem
 import kotlinx.coroutines.flow.collectLatest
 
 /* 
@@ -55,23 +56,26 @@ fun PokemonListScreen(
             columns = GridCells.Fixed(2),
         ) {
             items(result.pokemonList.size) { index ->
-                PokemonItem(pokemonId = index + 1, pokemonName = result.pokemonList[index])
+                PokemonItem(pokemon = result.pokemonList[index])
             }
         }
     }
 }
 
 @Composable
-fun PokemonItem(modifier: Modifier = Modifier, pokemonId: Int, pokemonName: String) {
+fun PokemonItem(modifier: Modifier = Modifier, pokemon: PokemonItem) {
     Card(elevation = 4.dp) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(8.dp)) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(8.dp)
+        ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(getPokemonUrl(pokemonId))
+                    .data(pokemon.spriteUrl)
                     .crossfade(true)
                     .placeholder(com.pineapplec.core.ui.R.drawable.pokeball_placeholder)
                     .build(),
-                contentDescription = "$pokemonName image",
+                contentDescription = "${pokemon.name} image",
                 modifier = Modifier
                     .width(80.dp)
                     .height(80.dp)
@@ -80,15 +84,12 @@ fun PokemonItem(modifier: Modifier = Modifier, pokemonId: Int, pokemonName: Stri
                 modifier = Modifier
                     .padding(top = 8.dp)
                     .fillMaxWidth(),
-                text = pokemonName,
+                text = pokemon.name,
                 textAlign = TextAlign.Center
             )
         }
     }
 }
-
-private fun getPokemonUrl(pokemonId: Int) =
-    "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$pokemonId.png"
 
 /*@Preview(showBackground = true)
 @Composable

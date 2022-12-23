@@ -1,8 +1,8 @@
 package com.pineapplec.data
 
+import com.pineapplec.common.mapResult
+import com.pineapplec.data.model.PokemonData
 import com.pineapplec.network.PokemonRemoteDataSource
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 /* 
@@ -14,7 +14,10 @@ class OfflineFirstPokemonRepository @Inject constructor(
     private val remoteDataSource: PokemonRemoteDataSource
 ) : PokemonRepository {
 
-    override fun getAllPokemon(): Flow<Result<List<String>>> = flow {
-        emit(remoteDataSource.getAllPokemon())
-    }
+    override suspend fun getAllPokemon(): Result<List<PokemonData>> =
+        remoteDataSource.getAllPokemon().mapResult {
+            it.map { basicPokemonInfoApi ->
+                PokemonData(name = basicPokemonInfoApi.name, url = basicPokemonInfoApi.url)
+            }
+        }
 }

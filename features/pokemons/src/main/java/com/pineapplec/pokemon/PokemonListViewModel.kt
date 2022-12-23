@@ -3,11 +3,13 @@ package com.pineapplec.pokemon
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pineapplec.domain.GetAllPokemonUseCase
+import com.pineapplec.domain.model.Pokemon
+import com.pineapplec.pokemon.model.PokemonItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
@@ -27,13 +29,22 @@ class PokemonListViewModel @Inject constructor(
         initialValue = PokemonListUiState.Loading
     )
 
-    private fun pokemonListUiState(): Flow<PokemonListUiState> =
-        getAllPokemon().map { result ->
-            PokemonListUiState.Result(result.getOrDefault(listOf()))
-        }
+    private fun pokemonListUiState(): Flow<PokemonListUiState> = flow {
+        getAllPokemon().fold(
+            { success -> emit(uiStateFromSuccess(success)) },
+            { emit(PokemonListUiState.Result(listOf())) }
+        )
+    }
+
+    private fun uiStateFromSuccess(pokemonList: List<Pokemon>): PokemonListUiState =
+        PokemonListUiState.Result(
+            pokemonList.map {
+                PokemonItem(id = it.id, name = it.name, spriteUrl = it.spriteUrl)
+            }
+        )
 }
 
 sealed interface PokemonListUiState {
     object Loading : PokemonListUiState
-    data class Result(val pokemonList: List<String>) : PokemonListUiState
+    data class Result(val pokemonList: List<PokemonItem>) : PokemonListUiState
 }

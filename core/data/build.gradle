@@ -34,6 +34,7 @@ android {
 
 dependencies {
     implementation implementation(project(':core:network'))
+    implementation implementation(project(':core:common'))
 
     implementation libs.androidx.core.ktx
     implementation libs.com.google.dagger.hilt.android

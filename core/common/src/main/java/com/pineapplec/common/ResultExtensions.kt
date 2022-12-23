@@ -1,4 +1,4 @@
-package com.pineapplec.domain
+package com.pineapplec.common
 
 import kotlin.coroutines.cancellation.CancellationException
 

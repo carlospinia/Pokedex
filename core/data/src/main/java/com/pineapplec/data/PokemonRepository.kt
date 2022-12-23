@@ -1,6 +1,6 @@
 package com.pineapplec.data
 
-import kotlinx.coroutines.flow.Flow
+import com.pineapplec.data.model.PokemonData
 
 /* 
     Created by Carlos Piña on 22/12/22.
@@ -8,5 +8,5 @@ import kotlinx.coroutines.flow.Flow
 */
 
 interface PokemonRepository {
-    fun getAllPokemon(): Flow<Result<List<String>>>
+    suspend fun getAllPokemon(): Result<List<PokemonData>>
 }
