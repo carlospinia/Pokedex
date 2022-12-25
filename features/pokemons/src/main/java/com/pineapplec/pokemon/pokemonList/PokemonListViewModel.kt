@@ -1,4 +1,4 @@
-package com.pineapplec.pokemon
+package com.pineapplec.pokemon.pokemonList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

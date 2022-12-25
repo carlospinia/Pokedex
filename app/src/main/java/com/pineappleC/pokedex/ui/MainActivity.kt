@@ -3,31 +3,52 @@ package com.pineappleC.pokedex.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.pineapplec.core.ui.theme.PokedexTheme
-import com.pineapplec.pokemon.PokemonListScreen
-import com.pineapplec.pokemon.PokemonListViewModel
+import com.pineapplec.core.ui.theme.Routes
+import com.pineapplec.core.ui.theme.Routes.Companion.POKEMON_DETAIL_SPRITE_URL
+import com.pineapplec.pokemon.pokemonDetail.PokemonDetailScreen
+import com.pineapplec.pokemon.pokemonList.PokemonListScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: PokemonListViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             PokedexTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    PokemonListScreen(viewModel = viewModel)
+                    val navController = rememberNavController()
+                    NavHost(
+                        navController = navController,
+                        startDestination = Routes.PokemonList.id
+                    ) {
+                        composable(Routes.PokemonList.id) {
+                            PokemonListScreen(navController)
+                        }
+                        composable(
+                            Routes.PokemonDetail.id,
+                            arguments = listOf(navArgument(POKEMON_DETAIL_SPRITE_URL) {
+                                type = NavType.IntType
+                            })
+                        ) { backStackEntry ->
+                            PokemonDetailScreen(
+                                backStackEntry.arguments?.getInt(POKEMON_DETAIL_SPRITE_URL)!!,
+                            )
+                        }
+                    }
                 }
             }
         }

@@ -1,5 +1,6 @@
-package com.pineapplec.pokemon
+package com.pineapplec.pokemon.pokemonList
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,10 +24,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.pineapplec.core.ui.R
+import com.pineapplec.core.ui.theme.Routes
 import com.pineapplec.pokemon.model.PokemonItem
 import kotlinx.coroutines.flow.collectLatest
+import java.util.*
 
 /* 
     Created by Carlos Piña on 21/12/22.
@@ -35,6 +40,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun PokemonListScreen(
+    navController: NavController,
     viewModel: PokemonListViewModel = hiltViewModel()
 ) {
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -56,15 +62,24 @@ fun PokemonListScreen(
             columns = GridCells.Fixed(2),
         ) {
             items(result.pokemonList.size) { index ->
-                PokemonItem(pokemon = result.pokemonList[index])
+                PokemonItem(pokemon = result.pokemonList[index], navController = navController)
             }
         }
     }
 }
 
 @Composable
-fun PokemonItem(modifier: Modifier = Modifier, pokemon: PokemonItem) {
-    Card(elevation = 4.dp) {
+fun PokemonItem(
+    modifier: Modifier = Modifier,
+    pokemon: PokemonItem,
+    navController: NavController
+) {
+    Card(
+        elevation = 4.dp,
+        modifier = Modifier.clickable {
+            navController.navigate(Routes.PokemonDetail.createRoute(pokemon.id))
+        }
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(8.dp)
@@ -73,7 +88,8 @@ fun PokemonItem(modifier: Modifier = Modifier, pokemon: PokemonItem) {
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(pokemon.spriteUrl)
                     .crossfade(true)
-                    .placeholder(com.pineapplec.core.ui.R.drawable.pokeball_placeholder)
+                    .placeholder(R.drawable.pokeball_placeholder)
+                    .error(R.drawable.pokeball_placeholder)
                     .build(),
                 contentDescription = "${pokemon.name} image",
                 modifier = Modifier
@@ -84,7 +100,10 @@ fun PokemonItem(modifier: Modifier = Modifier, pokemon: PokemonItem) {
                 modifier = Modifier
                     .padding(top = 8.dp)
                     .fillMaxWidth(),
-                text = pokemon.name,
+                text = pokemon.name.replaceFirstChar {
+                    if (it.isLowerCase()) it.titlecase(Locale.getDefault())
+                    else it.toString()
+                },
                 textAlign = TextAlign.Center
             )
         }
