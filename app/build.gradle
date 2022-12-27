@@ -49,8 +49,9 @@ android {
 }
 
 dependencies {
-    implementation implementation(project(':core:ui'))
-    implementation implementation(project(':features:pokemons'))
+    implementation(project(':core:ui'))
+    implementation(project(':features:pokemons'))
+    implementation(project(':core:common'))
 
     implementation libs.androidx.core.ktx
     implementation libs.androidx.lifecycle.runtime.ktx

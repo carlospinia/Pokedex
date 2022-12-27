@@ -1,6 +1,8 @@
 package com.pineapplec.network
 
 import com.pineapplec.network.model.BasicPokemonInfoApi
+import com.pineapplec.network.model.PokemonAPI
+import com.pineapplec.network.model.SpecieAPI
 
 /* 
     Created by Carlos Piña on 22/12/22.
@@ -8,5 +10,7 @@ import com.pineapplec.network.model.BasicPokemonInfoApi
 */
 
 interface PokemonRemoteDataSource {
-    suspend fun getAllPokemon(): Result<List<BasicPokemonInfoApi>>
+    suspend fun getPokemonList(offset: Int, limit: Int): Result<List<BasicPokemonInfoApi>>
+    suspend fun getPokemonById(pokemonId: Int): Result<PokemonAPI>
+    suspend fun getSpecieById(pokemonId: Int): Result<SpecieAPI>
 }

@@ -8,5 +8,6 @@ import com.pineapplec.data.model.PokemonData
 */
 
 interface PokemonRepository {
-    suspend fun getAllPokemon(): Result<List<PokemonData>>
+    suspend fun getPokemonList(offset: Int, limit: Int): Result<List<PokemonData>>
+    suspend fun getPokemonById(pokemonId: Int): Result<PokemonData>
 }

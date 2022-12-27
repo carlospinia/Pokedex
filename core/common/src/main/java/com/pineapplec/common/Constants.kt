@@ -1,4 +1,4 @@
-package com.pineapplec.domain.model
+package com.pineapplec.common
 
 /* 
     Created by Carlos Piña on 23/12/22.

@@ -7,8 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.pineapplec.common.POKEMON_SPRITE_URL
 import com.pineapplec.core.ui.R
-import com.pineapplec.domain.model.POKEMON_SPRITE_URL
 
 /* 
     Created by Carlos Piña on 25/12/22.

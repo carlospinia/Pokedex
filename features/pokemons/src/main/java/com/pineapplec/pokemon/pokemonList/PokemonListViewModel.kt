@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.pineapplec.domain.GetAllPokemonUseCase
 import com.pineapplec.domain.model.Pokemon
 import com.pineapplec.pokemon.model.PokemonItem
+import com.pineapplec.pokemon.model.toPokemonItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -37,11 +38,7 @@ class PokemonListViewModel @Inject constructor(
     }
 
     private fun uiStateFromSuccess(pokemonList: List<Pokemon>): PokemonListUiState =
-        PokemonListUiState.Result(
-            pokemonList.map {
-                PokemonItem(id = it.id, name = it.name, spriteUrl = it.spriteUrl)
-            }
-        )
+        PokemonListUiState.Result(pokemonList.map { it.toPokemonItem() })
 }
 
 sealed interface PokemonListUiState {

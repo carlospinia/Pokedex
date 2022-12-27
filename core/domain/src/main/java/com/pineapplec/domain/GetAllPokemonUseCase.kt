@@ -3,8 +3,8 @@ package com.pineapplec.domain
 import androidx.annotation.CheckResult
 import com.pineapplec.common.mapResult
 import com.pineapplec.data.PokemonRepository
-import com.pineapplec.domain.model.POKEMON_SPRITE_URL
 import com.pineapplec.domain.model.Pokemon
+import com.pineapplec.domain.model.toPokemon
 import javax.inject.Inject
 
 /* 
@@ -15,28 +15,10 @@ import javax.inject.Inject
 class GetAllPokemonUseCase @Inject constructor(
     private val repository: PokemonRepository
 ) {
-
-    companion object {
-        const val CORRUPT_POKEMON_ID = -1
-    }
-
     @CheckResult
-    suspend operator fun invoke(): Result<List<Pokemon>> {
-        return repository.getAllPokemon().mapResult {
-            it.map { pokemonInfo ->
-                val pokemonId = pokemonIdFromPokemonUrl(pokemonInfo.url)
-                Pokemon(
-                    id = pokemonId,
-                    name = pokemonInfo.name,
-                    spriteUrl = getPokemonUrl(pokemonId)
-                )
-            }.filterNot { pokemon -> pokemon.id == CORRUPT_POKEMON_ID }
+    suspend operator fun invoke(offset: Int = 0, limit: Int = 30): Result<List<Pokemon>> {
+        return repository.getPokemonList(offset, limit).mapResult {
+            it.map { pokemonInfo -> pokemonInfo.toPokemon() }
         }
     }
-
-    private fun pokemonIdFromPokemonUrl(pokemonUrl: String): Int =
-        pokemonUrl.split("/").filterNot { it == "" }.last().toIntOrNull() ?: CORRUPT_POKEMON_ID
-
-    private fun getPokemonUrl(pokemonId: Int): String =
-        POKEMON_SPRITE_URL.format(pokemonId.toFloat())
 }
