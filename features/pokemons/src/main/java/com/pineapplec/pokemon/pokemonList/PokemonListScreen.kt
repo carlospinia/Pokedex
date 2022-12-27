@@ -72,7 +72,7 @@ fun PokemonListScreen(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             columns = GridCells.Fixed(2),
         ) {
-            items(result.pokemonList.size) { index ->
+            items(result.pokemonList.size, key = { result.pokemonList[it].id }) { index ->
                 PokemonItem(pokemon = result.pokemonList[index], navController = navController)
             }
         }
@@ -81,7 +81,6 @@ fun PokemonListScreen(
 
 @Composable
 fun PokemonItem(
-    modifier: Modifier = Modifier,
     pokemon: PokemonItem,
     navController: NavController
 ) {
