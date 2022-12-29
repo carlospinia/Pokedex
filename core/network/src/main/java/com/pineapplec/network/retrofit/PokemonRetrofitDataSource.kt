@@ -14,11 +14,8 @@ class PokemonRetrofitDataSource(
     private val network: PokemonAPIService
 ) : PokemonRemoteDataSource {
 
-    override suspend fun getPokemonList(
-        offset: Int,
-        limit: Int
-    ): Result<List<BasicPokemonInfoApi>> {
-        network.api.getPokemonList(offset, limit).fold(
+    override suspend fun getPokemonList(): Result<List<BasicPokemonInfoApi>> {
+        network.api.getPokemonList().fold(
             { success -> return Result.success(success.pokemonList) },
             { error -> return Result.failure(error) }
         )

@@ -1,8 +1,6 @@
 package com.pineapplec.domain.model
 
 import com.pineapplec.data.model.PokemonData
-import com.pineapplec.data.model.PokemonStatData
-import com.pineapplec.data.model.PokemonTypeData
 
 /* 
     Created by Carlos Piña on 23/12/22.
@@ -15,17 +13,13 @@ data class Pokemon(
     val spriteUrl: String,
     val height: String,
     val weight: String,
-    val stats: PokemonStats,
+    val hp: Int,
+    val attack: Int,
+    val specialAttack: Int,
+    val defense: Int,
+    val specialDefense: Int,
     val types: List<String>,
     val specieColor: SpecieColor
-)
-
-data class PokemonStats(
-    val hp: Int = 0,
-    val attack: Int = 0,
-    val specialAttack: Int = 0,
-    val defense: Int = 0,
-    val specialDefense: Int = 0
 )
 
 enum class SpecieColor {
@@ -38,26 +32,14 @@ fun PokemonData.toPokemon() = Pokemon(
     spriteUrl = spriteUrl,
     height = height,
     weight = weight,
-    stats = stats.toPokemonStats(),
-    types = types.toPokemonTypes(),
+    hp = hp,
+    attack = attack,
+    specialAttack = specialAttack,
+    defense = defense,
+    specialDefense = specialDefense,
+    types = types,
     specieColor = specieColor.toSpecieColor()
 )
-
-private fun List<PokemonStatData>.toPokemonStats(): PokemonStats {
-    var pokemonStats = PokemonStats()
-    forEach { stat ->
-        when (stat.stat.name) {
-            "hp" -> pokemonStats = pokemonStats.copy(hp = stat.baseStat)
-            "attack" -> pokemonStats = pokemonStats.copy(attack = stat.baseStat)
-            "special-attack" -> pokemonStats = pokemonStats.copy(specialAttack = stat.baseStat)
-            "defense" -> pokemonStats = pokemonStats.copy(defense = stat.baseStat)
-            "special-defense" -> pokemonStats = pokemonStats.copy(specialDefense = stat.baseStat)
-        }
-    }
-    return pokemonStats
-}
-
-private fun List<PokemonTypeData>.toPokemonTypes(): List<String> = map { it.type.name }
 
 private fun String.toSpecieColor() = when (this) {
     "black" -> SpecieColor.BLACK

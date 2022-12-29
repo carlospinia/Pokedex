@@ -1,10 +1,10 @@
 package com.pineapplec.domain
 
-import androidx.annotation.CheckResult
-import com.pineapplec.common.mapResult
 import com.pineapplec.data.PokemonRepository
 import com.pineapplec.domain.model.Pokemon
 import com.pineapplec.domain.model.toPokemon
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 /* 
@@ -15,10 +15,14 @@ import javax.inject.Inject
 class GetAllPokemonUseCase @Inject constructor(
     private val repository: PokemonRepository
 ) {
-    @CheckResult
-    suspend operator fun invoke(offset: Int = 0, limit: Int = 30): Result<List<Pokemon>> {
-        return repository.getPokemonList(offset, limit).mapResult {
+
+    fun fromLocal(): Flow<List<Pokemon>> {
+        return repository.getLocalPokemonList().map {
             it.map { pokemonInfo -> pokemonInfo.toPokemon() }
         }
+    }
+
+    suspend fun syncWithRemote() {
+        repository.syncPokemonListWithRemote()
     }
 }

@@ -10,14 +10,16 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /* 
     Created by Carlos Piña on 21/12/22.
     Copyright (c) 2022 ElConfidencial. All rights reserved.
 */
+
 
 @HiltViewModel
 class PokemonListViewModel @Inject constructor(
@@ -30,15 +32,22 @@ class PokemonListViewModel @Inject constructor(
         initialValue = PokemonListUiState.Loading
     )
 
-    private fun pokemonListUiState(): Flow<PokemonListUiState> = flow {
-        getAllPokemon().fold(
-            { success -> emit(uiStateFromSuccess(success)) },
-            { emit(PokemonListUiState.Result(listOf())) }
-        )
-    }
+    private fun pokemonListUiState(): Flow<PokemonListUiState> =
+        getAllPokemon.fromLocal().map(
+            ::handleGetAllPokemonFromLocal
+        ).also {
+            syncPokemonList()
+        }
 
-    private fun uiStateFromSuccess(pokemonList: List<Pokemon>): PokemonListUiState =
-        PokemonListUiState.Result(pokemonList.map { it.toPokemonItem() })
+    private fun handleGetAllPokemonFromLocal(pokemonList: List<Pokemon>): PokemonListUiState =
+        when (pokemonList.isEmpty()) {
+            true -> PokemonListUiState.Loading
+            false -> PokemonListUiState.Result(pokemonList.map { it.toPokemonItem() })
+        }
+
+    private fun syncPokemonList() = viewModelScope.launch {
+        getAllPokemon.syncWithRemote()
+    }
 }
 
 sealed interface PokemonListUiState {

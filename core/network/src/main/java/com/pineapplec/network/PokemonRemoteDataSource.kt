@@ -10,7 +10,7 @@ import com.pineapplec.network.model.SpecieAPI
 */
 
 interface PokemonRemoteDataSource {
-    suspend fun getPokemonList(offset: Int, limit: Int): Result<List<BasicPokemonInfoApi>>
+    suspend fun getPokemonList(): Result<List<BasicPokemonInfoApi>>
     suspend fun getPokemonById(pokemonId: Int): Result<PokemonAPI>
     suspend fun getSpecieById(pokemonId: Int): Result<SpecieAPI>
 }

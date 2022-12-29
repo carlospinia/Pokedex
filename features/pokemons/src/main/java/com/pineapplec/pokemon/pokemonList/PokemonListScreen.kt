@@ -83,27 +83,35 @@ fun PokemonListScreen(
             listVisibility = false
         }
         is PokemonListUiState.Result -> {
-            val result = pokemonUiState as PokemonListUiState.Result
+            val pokemonList = (pokemonUiState as PokemonListUiState.Result).pokemonList
             AnimatedVisibility(
                 visible = listVisibility,
                 enter = fadeIn(animationSpec = tween(1_000)),
                 exit = fadeOut(animationSpec = tween(1_000))
             ) {
-                LazyVerticalGrid(
-                    contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    columns = GridCells.Fixed(2),
-                ) {
-                    items(result.pokemonList.size, key = { result.pokemonList[it].id }) { index ->
-                        PokemonItem(
-                            pokemon = result.pokemonList[index],
-                            navController = navController
-                        )
-                    }
-                }
+                PokemonList(pokemonList, navController)
             }
             listVisibility = true
+        }
+    }
+}
+
+@Composable
+private fun PokemonList(
+    pokemonList: List<PokemonItem>,
+    navController: NavController
+) {
+    LazyVerticalGrid(
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        columns = GridCells.Fixed(2),
+    ) {
+        items(pokemonList.size, key = { pokemonList[it].id }) { index ->
+            PokemonItem(
+                pokemon = pokemonList[index],
+                navController = navController
+            )
         }
     }
 }

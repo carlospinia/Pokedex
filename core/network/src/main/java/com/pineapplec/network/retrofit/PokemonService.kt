@@ -5,7 +5,6 @@ import com.pineapplec.network.model.PokemonAPI
 import com.pineapplec.network.model.SpecieAPI
 import retrofit2.http.GET
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 /* 
     Created by Carlos Piña on 22/12/22.
@@ -14,11 +13,8 @@ import retrofit2.http.Query
 
 interface PokemonService {
 
-    @GET("pokemon")
-    suspend fun getPokemonList(
-        @Query("offset") offset: Int,
-        @Query("limit") limit: Int
-    ): Result<GetAllPokemonApiResponse>
+    @GET("pokemon?offset=0&limit=30")
+    suspend fun getPokemonList(): Result<GetAllPokemonApiResponse>
 
     @GET("pokemon/{pokemonId}")
     suspend fun getPokemonById(
