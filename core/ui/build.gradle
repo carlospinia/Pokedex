@@ -41,6 +41,7 @@ dependencies {
     implementation libs.androidx.core.ktx
     implementation libs.androidx.compose.ui
     implementation libs.androidx.compose.material
+    api libs.com.airbnb.android.lottie.compose
 
     testImplementation libs.junit.junit
 }

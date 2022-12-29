@@ -20,7 +20,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -29,7 +28,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
@@ -47,6 +45,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.pineapplec.core.ui.R
 import com.pineapplec.core.ui.theme.Routes
 import com.pineapplec.pokemon.model.PokemonItem
@@ -77,9 +79,7 @@ fun PokemonListScreen(
     var listVisibility by remember { mutableStateOf(false) }
     when (pokemonUiState) {
         PokemonListUiState.Loading -> {
-            Box(modifier = Modifier.fillMaxSize()) {
-                CircularProgressIndicator(Modifier.align(Alignment.Center))
-            }
+            Loader()
             listVisibility = false
         }
         is PokemonListUiState.Result -> {
@@ -209,5 +209,13 @@ fun PokemonImage(pokemon: PokemonItem) {
                 .fillMaxSize()
                 .padding(12.dp)
         )
+    }
+}
+
+@Composable
+fun Loader() {
+    Box(modifier = Modifier.fillMaxSize()) {
+        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.diglett_loading))
+        LottieAnimation(composition = composition, iterations = LottieConstants.IterateForever)
     }
 }
