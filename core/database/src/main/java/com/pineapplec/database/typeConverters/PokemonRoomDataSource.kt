@@ -14,12 +14,12 @@ class PokemonRoomDataSource(
     private val pokemonDao: PokemonDao
 ) : PokemonLocalDataSource {
 
-    override suspend fun isEmpty(): Boolean = pokemonDao.movieCount() <= 0
+    override suspend fun isEmpty(): Boolean = (pokemonDao.movieCount() ?: 0) <= 0
 
     override val pokemonList: Flow<List<PokemonEntity>> =
         pokemonDao.getPokemonList()
 
-    override suspend fun getPokemonById(pokemonId: Int): PokemonEntity =
+    override suspend fun getPokemonById(pokemonId: Int): PokemonEntity? =
         pokemonDao.getPokemonByID(pokemonId)
 
     override suspend fun insertOrReplacePokemonList(pokemonEntityList: List<PokemonEntity>) {

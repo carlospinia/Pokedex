@@ -14,7 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.pineapplec.core.ui.theme.PokedexTheme
 import com.pineapplec.core.ui.theme.Routes
-import com.pineapplec.core.ui.theme.Routes.Companion.POKEMON_DETAIL_SPRITE_URL
+import com.pineapplec.core.ui.theme.Routes.Companion.POKEMON_ID
 import com.pineapplec.pokemon.pokemonDetail.PokemonDetailScreen
 import com.pineapplec.pokemon.pokemonList.PokemonListScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,13 +40,11 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(
                             Routes.PokemonDetail.id,
-                            arguments = listOf(navArgument(POKEMON_DETAIL_SPRITE_URL) {
+                            arguments = listOf(navArgument(POKEMON_ID) {
                                 type = NavType.IntType
                             })
-                        ) { backStackEntry ->
-                            PokemonDetailScreen(
-                                backStackEntry.arguments?.getInt(POKEMON_DETAIL_SPRITE_URL)!!,
-                            )
+                        ) {
+                            PokemonDetailScreen()
                         }
                     }
                 }

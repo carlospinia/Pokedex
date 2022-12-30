@@ -7,11 +7,11 @@ package com.pineapplec.core.ui.theme
 
 sealed class Routes(val id: String) {
     companion object {
-        const val POKEMON_DETAIL_SPRITE_URL = "spriteUrl"
+        const val POKEMON_ID = "pokemonId"
     }
 
     object PokemonList : Routes("PokemonList")
-    object PokemonDetail : Routes("PokemonDetail/{$POKEMON_DETAIL_SPRITE_URL}") {
+    object PokemonDetail : Routes("PokemonDetail/{$POKEMON_ID}") {
         fun createRoute(pokemonId: Int) = "PokemonDetail/$pokemonId"
     }
 }

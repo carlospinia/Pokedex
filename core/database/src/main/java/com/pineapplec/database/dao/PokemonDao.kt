@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.Flow
 interface PokemonDao {
 
     @Query("SELECT COUNT(id) FROM pokemon")
-    suspend fun movieCount(): Int
+    suspend fun movieCount(): Int?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrReplacePokemonList(pokemonList: List<PokemonEntity>)
@@ -25,5 +25,5 @@ interface PokemonDao {
     fun getPokemonList(): Flow<List<PokemonEntity>>
 
     @Query("SELECT * FROM pokemon WHERE id = :id")
-    suspend fun getPokemonByID(id: Int): PokemonEntity
+    suspend fun getPokemonByID(id: Int): PokemonEntity?
 }

@@ -11,6 +11,6 @@ import kotlinx.coroutines.flow.Flow
 interface PokemonLocalDataSource {
     suspend fun isEmpty(): Boolean
     val pokemonList: Flow<List<PokemonEntity>>
-    suspend fun getPokemonById(pokemonId: Int): PokemonEntity
+    suspend fun getPokemonById(pokemonId: Int): PokemonEntity?
     suspend fun insertOrReplacePokemonList(pokemonEntityList: List<PokemonEntity>)
 }

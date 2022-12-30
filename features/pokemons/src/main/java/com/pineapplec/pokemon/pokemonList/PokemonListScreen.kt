@@ -45,11 +45,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.pineapplec.core.ui.R
+import com.pineapplec.core.ui.theme.Loader
 import com.pineapplec.core.ui.theme.Routes
 import com.pineapplec.pokemon.model.PokemonItem
 import kotlinx.coroutines.flow.collectLatest
@@ -209,13 +206,5 @@ fun PokemonImage(pokemon: PokemonItem) {
                 .fillMaxSize()
                 .padding(12.dp)
         )
-    }
-}
-
-@Composable
-fun Loader() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.diglett_loading))
-        LottieAnimation(composition = composition, iterations = LottieConstants.IterateForever)
     }
 }
