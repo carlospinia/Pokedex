@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
                                 type = NavType.IntType
                             })
                         ) {
-                            PokemonDetailScreen()
+                            PokemonDetailScreen(onBackPressed = { navController.popBackStack() })
                         }
                     }
                 }

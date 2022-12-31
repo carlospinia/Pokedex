@@ -10,7 +10,7 @@ import com.pineapplec.network.model.PokemonAPI
 
 data class PokemonData(
     val id: Int,
-    val name: String,
+    val name: String = "",
     val spriteUrl: String = "",
     val height: String = "",
     val weight: String = "",

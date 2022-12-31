@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pokemon_detail_error">Pokemon data not found.</string>
+</resources>

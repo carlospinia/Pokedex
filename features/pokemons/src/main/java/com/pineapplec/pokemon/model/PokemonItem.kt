@@ -15,7 +15,12 @@ data class PokemonItem(
     val name: String,
     val spriteUrl: String,
     val types: List<String>,
-    @ColorInt val specieColor: Int
+    @ColorInt val specieColor: Int,
+    val hp: Int,
+    val attack: Int,
+    val specialAttack: Int,
+    val defense: Int,
+    val specialDefense: Int
 )
 
 fun Pokemon.toPokemonItem() = PokemonItem(
@@ -23,7 +28,12 @@ fun Pokemon.toPokemonItem() = PokemonItem(
     name = name,
     spriteUrl = spriteUrl,
     types = types,
-    specieColor = specieColor.toColorInt()
+    specieColor = specieColor.toColorInt(),
+    hp = hp,
+    attack = attack,
+    specialAttack = specialAttack,
+    defense = defense,
+    specialDefense = specialDefense
 )
 
 private fun SpecieColor.toColorInt() = when (this) {
