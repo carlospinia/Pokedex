@@ -21,8 +21,9 @@ import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Snackbar
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,6 +47,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.pineapplec.common.POKEMON_SPRITE_URL
 import com.pineapplec.core.ui.R
 import com.pineapplec.core.ui.theme.Loader
@@ -66,6 +68,7 @@ fun PokemonDetailScreen(
     onBackPressed: () -> Unit,
     viewModel: PokemonDetailViewModel = hiltViewModel()
 ) {
+
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val pokemonDetailUiState by produceState<PokemonDetailUiState>(
         initialValue = PokemonDetailUiState.Loading,
@@ -84,6 +87,8 @@ fun PokemonDetailScreen(
         }
         is PokemonDetailUiState.Result -> {
             val pokemonItem = (pokemonDetailUiState as PokemonDetailUiState.Result).pokemonItem
+            SetSystemBarColors(pokemonItem.specieColor)
+
             Column(
                 modifier = Modifier.background(Color(pokemonItem.specieColor))
             ) {
@@ -103,7 +108,7 @@ fun PokemonDetailScreen(
 @Composable
 fun PokemonDetailNavBar(specieColor: Int, onBackPressed: () -> Unit) {
     Icon(
-        imageVector = Icons.Default.ArrowBack,
+        imageVector = Icons.Rounded.ArrowBack,
         contentDescription = "back button",
         tint = if (specieColor == Color.White.toArgb()) Color.Gray else Color.White,
         modifier = Modifier.clickable { onBackPressed() }
@@ -288,5 +293,23 @@ fun PokemonStat(statName: String, statValue: Float, specieColor: Int) {
     LaunchedEffect(statValue) {
         uiStatValue = statValue
     }
+}
 
+@Composable
+private fun SetSystemBarColors(color: Int) {
+    val systemUiController = rememberSystemUiController()
+    val darkIcons = color == Color.White.toArgb()
+
+    DisposableEffect(systemUiController, darkIcons) {
+        systemUiController.setStatusBarColor(
+            color = Color(color),
+            darkIcons = darkIcons
+        )
+        systemUiController.setNavigationBarColor(
+            color = Color.White,
+            darkIcons = true
+        )
+
+        onDispose { }
+    }
 }

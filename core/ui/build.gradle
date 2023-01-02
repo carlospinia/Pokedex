@@ -43,6 +43,8 @@ dependencies {
     implementation libs.androidx.compose.material
     api libs.com.airbnb.android.lottie.compose
     api libs.androidx.constraintlayout.compose
+    api libs.com.google.accompanist.systemuicontroller
+    api libs.com.google.accompanist.navigation.animation
 
     testImplementation libs.junit.junit
 }

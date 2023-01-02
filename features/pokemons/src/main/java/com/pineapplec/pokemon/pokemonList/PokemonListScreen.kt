@@ -5,6 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -45,6 +47,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.pineapplec.core.ui.R
 import com.pineapplec.core.ui.theme.Loader
 import com.pineapplec.core.ui.theme.Routes
@@ -62,6 +65,18 @@ fun PokemonListScreen(
     navController: NavController,
     viewModel: PokemonListViewModel = hiltViewModel()
 ) {
+    val systemUiController = rememberSystemUiController()
+    val isSystemInDarkTheme = isSystemInDarkTheme()
+
+    DisposableEffect(systemUiController, isSystemInDarkTheme) {
+        systemUiController.setSystemBarsColor(
+            color = if (isSystemInDarkTheme) Color.Black else Color.White,
+            darkIcons = !isSystemInDarkTheme
+        )
+
+        onDispose { }
+    }
+
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val pokemonUiState by produceState<PokemonListUiState>(
         initialValue = PokemonListUiState.Loading,
@@ -80,15 +95,23 @@ fun PokemonListScreen(
             listVisibility = false
         }
         is PokemonListUiState.Result -> {
-            val pokemonList = (pokemonUiState as PokemonListUiState.Result).pokemonList
-            AnimatedVisibility(
-                visible = listVisibility,
-                enter = fadeIn(animationSpec = tween(1_000)),
-                exit = fadeOut(animationSpec = tween(1_000))
-            ) {
-                PokemonList(pokemonList, navController)
+            Column {
+                Text(
+                    text = "Pokédex",
+                    fontSize = 30.sp,
+                    modifier = Modifier.padding(start = 16.dp, top = 8.dp),
+                    fontWeight = FontWeight.SemiBold
+                )
+                val pokemonList = (pokemonUiState as PokemonListUiState.Result).pokemonList
+                AnimatedVisibility(
+                    visible = listVisibility,
+                    enter = fadeIn(animationSpec = tween(1_000)),
+                    exit = fadeOut(animationSpec = tween(1_000))
+                ) {
+                    PokemonList(pokemonList, navController)
+                }
+                listVisibility = true
             }
-            listVisibility = true
         }
     }
 }

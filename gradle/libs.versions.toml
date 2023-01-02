@@ -7,6 +7,7 @@ hiltNavigationCompose = "1.0.0"
 retrofitVersion = "2.9.0"
 moshiVersion = "1.14.0"
 roomVersion = "2.4.3"
+accompanistVersion = "0.28.0"
 
 [libraries]
 androidx-core-ktx = "androidx.core:core-ktx:1.9.0"
@@ -33,6 +34,8 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomVers
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomVersion" }
 com-airbnb-android-lottie-compose = "com.airbnb.android:lottie-compose:5.2.0"
 androidx-constraintlayout-compose = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
+com-google-accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistVersion" }
+com-google-accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanistVersion" }
 
 #Test
 junit-junit = "junit:junit:4.13.2"
